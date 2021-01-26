@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+  <a href="/chat_server/">Quit</a><br><br>
+  <a href="chat">Refresh</a><br><br>
+
+hello <%= name %>
+<form action="chat" method="post">
+  <label>Message:</label>
+  <input type="text" name="message">
+  <input type="submit" value="Submit">
+</form>
+
+<ul>
+    <% messageList.forEach(function(message) { %>
+        <li><%= message %></li>
+    <% }); %>
+</ul>
+
+
+</body>
+</html>
