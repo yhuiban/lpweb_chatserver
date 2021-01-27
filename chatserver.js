@@ -38,7 +38,7 @@ app.get('/', function(req, res) {
 // chat get
 app.get('/chat', function(req, res) {
   if (!isUsernameDefined(req)) {
-    res.redirect('/chat_server/');
+    res.redirect('/');
   } else {
     res.render('pages/chat', {name: req.session.username, messageList});
   }
@@ -49,7 +49,7 @@ app.post('/chat', function(req, res) {
   if (req.body.name) {
     if (names.includes(req.body.name)) {
       // user name is already taken
-      res.redirect('/chat_server/');
+      res.redirect('/');
       return;
     } else {
       // user is unknown, create a session
@@ -65,7 +65,7 @@ app.post('/chat', function(req, res) {
   }
   // render pages
   if (!isUsernameDefined(req)) {
-    res.redirect('/chat_server/');
+    res.redirect('/');
   } else {
     res.render('pages/chat', {name: req.session.username, messageList});
   }
@@ -75,7 +75,7 @@ app.post('/chat', function(req, res) {
 app.get('/reset', function (req, res) {
   messageList = [];
   names = [];
-  res.redirect('/chat_server/');
+  res.redirect('/');
 });
 
 // ==================================================================
