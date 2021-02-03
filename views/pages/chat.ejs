@@ -8,6 +8,7 @@ hello <%= name %>
 <form action="chat" method="post">
   <label>Message:</label>
   <input type="text" name="message">
+  <input type="hidden" name="userSTP" value="<%= userSTP %>" >
   <input type="submit" value="Submit">
 </form>
 

@@ -7,6 +7,8 @@ var bodyParser = require('body-parser')
 // ==================================================================
 var app = express();
 
+let tokenId = 0;
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -38,9 +40,11 @@ app.get('/', function(req, res) {
 // chat get
 app.get('/chat', function(req, res) {
   if (!isUsernameDefined(req)) {
-    res.redirect('/chat_server/');
+    res.redirect('/');
   } else {
-    res.render('pages/chat', {name: req.session.username, messageList});
+    req.session.userSTP = tokenId++;
+    console.log('req.session.userSTP = ' + req.session.userSTP);
+    res.render('pages/chat', {name: req.session.username, userSTP: req.session.userSTP, messageList});
   }
 });
 
@@ -49,7 +53,7 @@ app.post('/chat', function(req, res) {
   if (req.body.name) {
     if (names.includes(req.body.name)) {
       // user name is already taken
-      res.redirect('/chat_server/');
+      res.redirect('/');
       return;
     } else {
       // user is unknown, create a session
@@ -63,11 +67,18 @@ app.post('/chat', function(req, res) {
     messageList.push(req.session.username + ': ' + req.body.message);
     console.log("message: " + req.session.username);
   }
+
+  // The token should be the same
+  if (req.session.userSTP != req.body.userSTP) {
+    res.redirect('/');
+  }
   // render pages
   if (!isUsernameDefined(req)) {
-    res.redirect('/chat_server/');
+    res.redirect('/');
   } else {
-    res.render('pages/chat', {name: req.session.username, messageList});
+    req.session.userSTP = tokenId++;
+    console.log('req.session.userSTP = ' + req.session.userSTP);
+    res.render('pages/chat', {name: req.session.username, userSTP: req.session.userSTP, messageList});
   }
 });
 
@@ -75,7 +86,7 @@ app.post('/chat', function(req, res) {
 app.get('/reset', function (req, res) {
   messageList = [];
   names = [];
-  res.redirect('/chat_server/');
+  res.redirect('/');
 });
 
 // ==================================================================
