@@ -1,13 +1,18 @@
-var express = require('express');
-var session = require('express-session')
-var bodyParser = require('body-parser')
+let express = require('express');
+let session = require('express-session')
+let bodyParser = require('body-parser')
+
+// ==================================================================
+// global variables
+// ==================================================================
+let tokenId = 0;
+let messageList = [];
+let names = [];
 
 // ==================================================================
 // express app configuration
 // ==================================================================
-var app = express();
-
-let tokenId = 0;
+let app = express();
 
 app.use(bodyParser.urlencoded({
   extended: true
@@ -42,9 +47,7 @@ app.get('/chat', function(req, res) {
   if (!isUsernameDefined(req)) {
     res.redirect('/');
   } else {
-    req.session.userSTP = tokenId++;
-    console.log('req.session.userSTP = ' + req.session.userSTP);
-    res.render('pages/chat', {name: req.session.username, userSTP: req.session.userSTP, messageList});
+    renderChatPage(req, res);
   }
 });
 
@@ -76,9 +79,7 @@ app.post('/chat', function(req, res) {
   if (!isUsernameDefined(req)) {
     res.redirect('/');
   } else {
-    req.session.userSTP = tokenId++;
-    console.log('req.session.userSTP = ' + req.session.userSTP);
-    res.render('pages/chat', {name: req.session.username, userSTP: req.session.userSTP, messageList});
+    renderChatPage(req, res);
   }
 });
 
@@ -96,10 +97,14 @@ function isUsernameDefined(req) {
   return req.session.username && req.session.username != '';
 }
 
+function renderChatPage(req, res) {
+  req.session.userSTP = tokenId++;
+  console.log('req.session.userSTP = ' + req.session.userSTP);
+  res.render('pages/chat', {name: req.session.username, userSTP: req.session.userSTP, messageList});
+}
+
 // ==================================================================
 // main
 // ==================================================================
 app.listen(8083);
 console.log('listening on 8083');
-let messageList = [];
-let names = [];
